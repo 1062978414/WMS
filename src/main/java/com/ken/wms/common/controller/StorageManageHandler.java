@@ -16,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +53,11 @@ public class StorageManageHandler {
     private Map<String, Object> query(String searchType, String keyword, String repositoryBelong, int offset,
                                       int limit) throws StorageManageServiceException {
         Map<String, Object> queryResult = null;
-
+        try {
+            keyword =java.net.URLDecoder.decode(java.net.URLDecoder.decode(keyword, "UTF-8"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         switch (searchType) {
             case SEARCH_ALL:
                 if (StringUtils.isNumeric(repositoryBelong)) {

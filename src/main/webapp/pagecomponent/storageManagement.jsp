@@ -90,7 +90,9 @@
 			offset : params.offset,
 			searchType : search_type_storage,
 			repositoryBelong : search_repository,
-			keyword : search_keyWord
+			keyword : encodeURIComponent(encodeURIComponent(search_keyWord))
+
+
 		}
 		console.log("搜索关键词--->"+search_keyWord);
 		return temp;
