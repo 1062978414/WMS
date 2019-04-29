@@ -84,6 +84,7 @@
 
 	// 分页查询参数
 	function queryParams(params) {
+		debugger;
 		var temp = {
 			limit : params.limit,
 			offset : params.offset,
@@ -91,6 +92,7 @@
 			repositoryBelong : search_repository,
 			keyword : search_keyWord
 		}
+		console.log("搜索关键词--->"+search_keyWord);
 		return temp;
 	}
 

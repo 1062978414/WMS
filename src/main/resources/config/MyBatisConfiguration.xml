@@ -4,6 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+    <settings>
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
     <plugins>
         <!-- 配置 PageHelper 分页插件 -->
         <plugin interceptor="com.github.pagehelper.PageHelper">
@@ -17,4 +21,4 @@
             <property name="returnPageInfo" value="none"/>
         </plugin>
     </plugins>
-</configuration>
+ </configuration>
