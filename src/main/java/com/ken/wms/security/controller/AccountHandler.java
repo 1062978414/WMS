@@ -22,6 +22,8 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -202,7 +204,7 @@ public class AccountHandler {
      * @param response 返回的 HttpServletResponse 响应
      */
     @RequestMapping(value = "checkCode/{time}", method = RequestMethod.GET)
-    public void getCheckCode(@PathVariable("time") String time, HttpServletResponse response, HttpServletRequest request) {
+    public String  getCheckCode(@PathVariable("time") String time, HttpServletResponse response, HttpServletRequest request) {
 
         BufferedImage checkCodeImage = null;
         String checkCodeString = null;
@@ -232,5 +234,26 @@ public class AccountHandler {
                 log.error("fail to get the ServletOutputStream");
             }
         }
+        return checkCodeString;
+    }
+
+    /**
+     * 验证码校验
+     * @param code
+     * @return
+     */
+    @RequestMapping(value = "checkOnline", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String checkC (@RequestBody String code) {
+        HttpSession session= ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+        String checkCode = (String) session.getAttribute("checkCode");
+        code = code.toUpperCase();
+        System.out.println("验证码是"+checkCode);
+        if(!(code.equals(checkCode)))
+        {
+            return "0";
+        }
+        return "1";
     }
 }

@@ -54,7 +54,7 @@
 									验证码：
 								</label>
 								<div class="col-md-5 col-sm-4">
-									<input type="text" id="checkCode" class="form-control"
+									<input type="text" id="checkCode" class="form-control"  onkeyup="myKeyup()"
 										placeholder="验证码" name="checkCode">
 								</div>
 								<div>
@@ -88,6 +88,8 @@
 		src="${pageContext.request.contextPath}/js/bootstrapValidator.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/js/jquery.md5.js"></script>
+	<script type="text/javascript"
+			src="${pageContext.request.contextPath}/js/jquery.validate.min.js"></script>
 
 	<script>
 		$(function() {
@@ -103,6 +105,28 @@
 			})
 		}
 
+		//验证码即时校验方法添加
+		function myKeyup() {
+			var checkCo = $('#checkCode').val();
+			if (checkCo.length==4) {
+				$.ajax({
+					url : "account/checkOnline",//后台请求的数据
+					type : "post",//请求方式
+					data : checkCo,
+					contentType : "application/json;charset=utf-8",
+					dataType : "json",//数据格式
+					async : false,//是否异步请求
+					success : function(data) {   //如果请求成功，返回数据。
+						if(data=='0'){
+							$('#checkCode').val("");
+						}
+					}
+				});
+			}
+			if (checkCo.length>4) {
+				$('#checkCode').val("");
+			}
+		}
 		// 登陆信息加密模块
 		function infoEncrypt(userID, password, checkCode) {
 			var str1 = $.md5(password);
@@ -187,7 +211,7 @@
 								field = "userID";
 							}
 							else if(response.msg == "incorrectCredentials"){
-								errorMessage = "密码或验证码错误";
+								errorMessage = "密码错误";
 								field = "password";
 								$('#password').val("");
 							}else{
@@ -199,8 +223,8 @@
 							// 更新 callback 错误信息，以及为错误对应的字段添加 错误信息
 							bv.updateMessage(field,'callback',errorMessage);
 							bv.updateStatus(field,'INVALID','callback');
-							bv.updateStatus("checkCode",'INVALID','callback');
-							
+							bv.updateStatus("checkCode",'validating','callback');
+
 							$('#checkCodeImg').attr("src","account/checkCode/" + new Date().getTime());
 							$('#checkCode').val("");
 						}else{
