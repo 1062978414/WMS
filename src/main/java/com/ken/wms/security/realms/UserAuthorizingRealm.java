@@ -93,8 +93,10 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
 
                 // 清除 session 中的 userInfo 密码敏感信息
                 userInfoDTO.setPassword(null);
+            }else{
+                //抛出用户不存在异常
+                throw new UnknownAccountException();
             }
-
             // 返回封装的认证信息
             return new SimpleAuthenticationInfo(principal, credentials, realmName);
 
