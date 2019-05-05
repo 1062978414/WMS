@@ -1,11 +1,20 @@
 body {
 	background: url(../../../media/images/backgroundPic.png);
 	background-size: 100%;
-	background-position: center;
-
+	/*background-position: center;*/
+	background-repeat: no-repeat;
 	margin-top:150px;
 }
 
 #checkCodeImg:hover{
 	cursor: pointer;
+}
+
+#loginIframe{
+	background-color:rgba(248,248,248,1);
+}
+
+.btn{
+
+	border-radius: 0px;
 }

@@ -55,6 +55,9 @@ public class RepositoryAdminManageHandler {
             case SEARCH_ALL:
                 queryResult = repositoryAdminManageService.selectAll(offset, limit);
                 break;
+            case "none":
+                queryResult = repositoryAdminManageService.selectAll(offset, limit);
+                break;
             case SEARCH_BY_ID:
                 if (StringUtils.isNumeric(keyWord))
                     queryResult = repositoryAdminManageService.selectByID(Integer.valueOf(keyWord));

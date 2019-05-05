@@ -59,6 +59,9 @@ public class SupplierManageHandler {
             case SEARCH_ALL:
                 queryResult = supplierManageService.selectAll(offset, limit);
                 break;
+            case "none":
+                queryResult = supplierManageService.selectAll(offset, limit);
+                break;
             default:
                 // do other thing
                 break;

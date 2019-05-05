@@ -53,7 +53,6 @@ public class UserInfoServiceImpl implements UserInfoService {
             UserInfoDO userInfoDO = userInfoMapper.selectByUserID(userID);
             // 获取用户角色信息
             List<RoleDO> roles = userPermissionMapper.selectUserRole(userID);
-
             return assembleUserInfo(userInfoDO, roles);
         } catch (PersistenceException e) {
             throw new UserInfoServiceException(e);

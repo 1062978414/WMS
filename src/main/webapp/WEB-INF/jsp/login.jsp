@@ -18,7 +18,7 @@
 
 			<!-- 这一列为登陆表单 -->
 			<div class="col-md-4 col-sm-6">
-				<div class="panel panel-default">
+				<div class="panel panel-default"  id="loginIframe">
 
 					<!-- 登陆面板的标题 -->
 					<div class="panel-title" style="text-align: center">
@@ -41,7 +41,7 @@
 
 							<div class="form-group">
 								<label class="control-label col-md-4 col-sm-4"> <!-- <span class="glyphicon glyphicon-lock"></span> -->
-									密码：
+									密&nbsp;&nbsp;&nbsp;码：
 								</label>
 								<div class="col-md-7 col-sm-7">
 									<input type="password" id="password" class="form-control"
@@ -118,7 +118,9 @@
 					async : false,//是否异步请求
 					success : function(data) {   //如果请求成功，返回数据。
 						if(data=='0'){
-							$('#checkCode').val("");
+							$('#checkCode').val("").focus();
+							$("#login_form").data('bootstrapValidator').updateMessage('checkCode','callback','验证码错误!');
+							$("#login_form").data('bootstrapValidator').updateStatus('checkCode','INVALID','');
 						}
 					}
 				});

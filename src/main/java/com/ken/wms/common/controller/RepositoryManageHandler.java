@@ -61,6 +61,9 @@ public class RepositoryManageHandler {
             case SEARCH_ALL:
                 queryResult = repositoryService.selectAll(offset, limit);
                 break;
+            case "none":
+                queryResult = repositoryService.selectAll(offset, limit);
+                break;
             default:
                 // do other thing
                 break;

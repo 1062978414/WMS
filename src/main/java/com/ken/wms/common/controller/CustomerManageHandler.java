@@ -59,6 +59,9 @@ public class CustomerManageHandler {
             case SEARCH_ALL:
                 queryResult = customerManageService.selectAll(offset, limit);
                 break;
+            case "none":
+                queryResult = customerManageService.selectAll(offset, limit);
+                break;
             default:
                 // do other thing
                 break;

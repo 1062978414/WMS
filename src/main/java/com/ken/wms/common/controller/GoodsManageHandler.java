@@ -59,6 +59,9 @@ public class GoodsManageHandler {
             case SEARCH_ALL:
                 queryResult = goodsManageService.selectAll(offset, limit);
                 break;
+            case "none":
+                queryResult = goodsManageService.selectAll(offset, limit);
+                break;
             default:
                 // do other thing
                 break;

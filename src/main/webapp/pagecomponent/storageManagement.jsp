@@ -63,6 +63,7 @@
 			},
 			success : function(response){
 				$.each(response.rows,function(index,elem){
+					$('#search_input_repository2').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
 			},
@@ -70,6 +71,7 @@
 				// do nothing
 			}
 		});
+		$('#search_input_repository2').append("<option value='all'>所有仓库</option>");
 		$('#search_input_repository').append("<option value='all'>所有仓库</option>");
 	}
 
@@ -605,8 +607,8 @@
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>仓库ID：</span>
 								</label>
 								<div class="col-md-8 col-sm-8">
-									<input type="text" class="form-control" id="storage_repositoryID"
-										name="storage_repositoryID" placeholder="仓库ID">
+									<select class="form-control" id="search_input_repository2">
+									</select>
 								</div>
 							</div>
 							<div class="form-group">
