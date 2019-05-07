@@ -14,7 +14,7 @@
 		storageListInit();
 		bootstrapValidatorInit();
 		repositoryOptionInit();
-
+		goodsOptionInit();
 		addStorageAction();
 		editStorageAction();
 		deleteStorageAction();
@@ -48,6 +48,67 @@
 		})
 	}
 
+	function bootstrapValidatorInit() {
+		$("#storage_form").bootstrapValidator({
+			message : 'This is not valid',
+			feedbackIcons : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			excluded : [ ':disabled' ],
+			fields : {
+				storage_goodsID : {
+					validators : {
+						notEmpty : {
+							message : '货物ID不能为空'
+						}
+					}
+				},
+				storage_repositoryID : {
+					validators : {
+						notEmpty : {
+							message : '仓库ID不能为空'
+						}
+					}
+				},
+				storage_number : {
+					validators : {
+						notEmpty : {
+							message : '库存数量不能为空'
+						}
+					}
+				}
+			}
+		})
+	}
+
+	// 货物ID下拉框数据初始化
+	function goodsOptionInit(){
+		$.ajax({
+			type : 'GET',
+			url : 'goodsManage/getGoodsList',
+			dataType : 'json',
+			contentType : 'application/json',
+			data:{
+				searchType : "searchAll",
+				keyWord : "",
+				offset : -1,
+				limit : -1
+			},
+			success : function(response){
+				$.each(response.rows,function(index,elem){
+					$('#storage_goodsID').append("<option value='" + elem.id + "'>" + elem.id +"</option>");
+				})
+			},
+			error : function(response){
+				// do nothing
+			}
+		});
+		// $('#storage_goodsID').append("<option value='all'>所有仓库</option>");
+		//$('#search_input_repository').append("<option value='all'>所有仓库</option>");
+	}
+
 	// 仓库下拉框数据初始化
 	function repositoryOptionInit(){
 		$.ajax({
@@ -63,16 +124,16 @@
 			},
 			success : function(response){
 				$.each(response.rows,function(index,elem){
-					$('#search_input_repository2').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
-					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+					$('#storage_repositoryID,#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+					//$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
 			},
 			error : function(response){
 				// do nothing
 			}
 		});
-		$('#search_input_repository2').append("<option value='all'>所有仓库</option>");
 		$('#search_input_repository').append("<option value='all'>所有仓库</option>");
+		//$('#search_input_repository').append("<option value='all'>所有仓库</option>");
 	}
 
 	// 搜索动作
@@ -327,6 +388,8 @@
 		});
 
 		$('#add_modal_submit').click(function() {
+			//实现验证成功后提交
+			$('#storage_form').bootstrapValidator('validate').on('success.form.bv',function(){
 			var data = {
 				goodsID : $('#storage_goodsID').val(),
 				repositoryID : $('#storage_repositoryID').val(),
@@ -367,6 +430,7 @@
 				}
 			})
 		})
+	})
 	}
 
 	var import_step = 1;
@@ -596,18 +660,19 @@
 						<form class="form-horizontal" role="form" id="storage_form"
 							style="margin-top: 25px">
 							<div class="form-group">
-								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物ID：</span>
+								<label for="" class="control-label col-md-4 col-sm-4" name="goods_id"> <span>货物ID：</span>
 								</label>
+
 								<div class="col-md-8 col-sm-8">
-									<input type="text" class="form-control" id="storage_goodsID"
-										name="storage_goodsID" placeholder="货物ID">
+									<select class="form-control" id="storage_goodsID">
+									</select>
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>仓库ID：</span>
 								</label>
 								<div class="col-md-8 col-sm-8">
-									<select class="form-control" id="search_input_repository2">
+									<select class="form-control" id="storage_repositoryID" name="repository_id">
 									</select>
 								</div>
 							</div>

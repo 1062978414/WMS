@@ -115,9 +115,14 @@
 		update 
 			wms_record_storage
 		set
+		<if test="isIncrease!=true">
 			RECORD_GOODID = #{goodsID},
 			RECORD_REPOSITORY = #{repositoryID},
 			RECORD_NUMBER = #{number}
+		</if>
+		<if test="isIncrease==true">
+			RECORD_NUMBER = RECORD_NUMBER+#{number}
+		</if>
 		where
 			RECORD_GOODID = #{goodsID} and
 			RECORD_REPOSITORY = #{repositoryID}

@@ -302,6 +302,14 @@ public class StorageManageServiceImpl implements StorageManageService {
                 storage.setRepositoryID(repositoryID);
                 storage.setNumber(number);
                 storageMapper.insert(storage);
+            } else {
+                Storage storage = new Storage();
+                storage.setGoodsID(goodsID);
+                storage.setRepositoryID(repositoryID);
+                storage.setNumber(number);
+                storage.setIncrease(true);
+                storageMapper.update(storage);
+                isAvailable = true;
             }
 
             return isAvailable;

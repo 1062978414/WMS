@@ -16,6 +16,16 @@ public class Storage {
 	private Integer repositoryID;// 仓库ID
 	private Long number;// 库存数量
 
+	public boolean isIncrease() {
+		return isIncrease;
+	}
+
+	public void setIncrease(boolean increase) {
+		isIncrease = increase;
+	}
+
+	private boolean isIncrease;// 是否原数量基础上增加
+
 	public Integer getGoodsID() {
 		return goodsID;
 	}
@@ -75,7 +85,7 @@ public class Storage {
 	@Override
 	public String toString() {
 		return "Storage [goodsID=" + goodsID + ", goodsName=" + goodsName + ", goodsSize=" + goodsSize + ", goodsType="
-				+ goodsType + ", goodsValue=" + goodsValue + ", repositoryID=" + repositoryID + ", number=" + number
+				+ goodsType + ", goodsValue=" + goodsValue + ", isIncrease=" + isIncrease + ", number=" + repositoryID + ", number=" + number
 				+ "]";
 	}
 

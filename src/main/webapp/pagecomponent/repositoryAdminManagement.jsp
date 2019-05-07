@@ -665,7 +665,7 @@
 							</div>
 							<div class="form-group">
 								<label for="BirthDate" class="control-label col-md-5 col-sm-5"> 
-									<span>出生日期:</span>
+									<span>出生日期:&nbsp;&nbsp;</span>
 								</label>
 								<div class="col-md-7 col-sm-7">
 									<input class="form_date form-control" value="" id="repositoryAdmin_birth" name="repositoryAdmin_birth" placeholder="出生日期">
@@ -937,7 +937,7 @@
 							</div>
 							<div class="form-group">
 								<label for="BirthDate" class="control-label col-md-5 col-sm-5"> 
-									<span>出生日期:</span>
+									<span>出生日期:&nbsp;&nbsp;</span>
 								</label>
 								<div class="col-md-7 col-sm-7">
 									<input class="form_date form-control" value="" id="repositoryAdmin_birth_edit" name="repositoryAdmin_birth" placeholder="出生日期">

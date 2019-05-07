@@ -358,7 +358,7 @@
 					<div class="col-md-10 col-sm-11">
 						<form action="" class="form-inline">
 							<div class="form-group">
-								<label for="" class="form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;供应商：</label>
+								<label for="" class="form-label">&nbsp;&nbsp;&nbsp;&nbsp;供应商：</label>
 								<input type="text" class="form-control" id="supplier_input" placeholder="请输入供应商名称">
 							</div>
 						</form>
