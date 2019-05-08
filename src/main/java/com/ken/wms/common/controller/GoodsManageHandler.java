@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +44,11 @@ public class GoodsManageHandler {
      */
     private Map<String, Object> query(String searchType, String keyWord, int offset, int limit) throws GoodsManageServiceException {
         Map<String, Object> queryResult = null;
-
+        try {
+            keyWord =java.net.URLDecoder.decode(java.net.URLDecoder.decode(keyWord, "UTF-8"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         switch (searchType) {
             case SEARCH_BY_ID:
                 if (StringUtils.isNumeric(keyWord))

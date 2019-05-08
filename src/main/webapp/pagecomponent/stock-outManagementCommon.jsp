@@ -53,7 +53,7 @@
 					data : {
 						offset : -1,
 						limit : -1,
-						keyWord : request.term,
+						keyWord : encodeURIComponent(encodeURIComponent(request.term)),
 						searchType : 'searchByName'
 					},
 					success : function(data){

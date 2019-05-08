@@ -56,7 +56,7 @@
 			limit : params.limit,
 			offset : params.offset,
 			searchType : search_type_supplier,
-			keyWord : search_keyWord
+			keyWord : encodeURIComponent(encodeURIComponent(search_keyWord))
 		}
 		return temp;
 	}

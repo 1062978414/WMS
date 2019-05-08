@@ -53,7 +53,7 @@
 					data : {
 						offset : -1,
 						limit : -1,
-						keyWord : request.term,
+						keyWord : encodeURIComponent(encodeURIComponent(request.term)),
 						searchType : 'searchByName'
 					},
 					success : function(data){
@@ -94,7 +94,7 @@
 						offset : -1,
 						limit : -1,
 						searchType : 'searchByName',
-						keyWord : request.term
+						keyWord : encodeURIComponent(encodeURIComponent(request.term))
 					},
 					success : function(data){
 						var autoCompleteInfo = new Array();

@@ -121,7 +121,7 @@
 			RECORD_NUMBER = #{number}
 		</if>
 		<if test="isIncrease==true">
-			RECORD_NUMBER = RECORD_NUMBER+#{number}
+			RECORD_NUMBER = RECORD_NUMBER+0+#{number}
 		</if>
 		where
 			RECORD_GOODID = #{goodsID} and
