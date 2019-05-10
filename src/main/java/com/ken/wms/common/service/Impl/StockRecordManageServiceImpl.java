@@ -183,6 +183,8 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         Map<String, Object> stockOutTemp;
         List<StockInDO> stockInRecordDOS = null;
         List<StockOutDO> stockOutRecordDOS = null;
+        if (searchType.equals("none"))
+            searchType = "all";
         switch (searchType) {
             case "all": {
                 if (offset < 0 || limit < 0) {
@@ -339,8 +341,6 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         return result;
     }
 
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-hh-mm");
-
     /**
      * 将 StockInDO 转换为 StockRecordDTO
      *
@@ -359,6 +359,8 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         stockRecordDTO.setType("入库");
         return stockRecordDTO;
     }
+
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     /**
      * 将 StockOutDO 转换为 StockRecordDTO 对象

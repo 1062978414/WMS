@@ -4,7 +4,7 @@
     var stockin_repository = null;// 入库仓库编号
     var stockin_supplier = null;// 入库供应商编号
     var stockin_goods = null;// 入库货物编号
-    var stockin_number = null;// 入库数量
+    var stockin_number = 0;// 入库数量
 
     var supplierCache = new Array();// 供应商信息缓存
     var goodsCache = new Array();//货物信息缓存
@@ -24,11 +24,6 @@
     function dataValidateInit() {
         $('#stockin_form').bootstrapValidator({
             message: 'This is not valid',
-            feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
             excluded: [':disabled'],
             fields: {
                 stockin_input: {
@@ -92,6 +87,7 @@
             select: function (event, ui) {
                 $('#goods_input').val(ui.item.label);
                 stockin_goods = ui.item.value;
+                console.log("stockin_goods:" + stockin_goods);
                 goodsInfoSet(stockin_goods);
                 loadStorageInfo();
                 return false;
@@ -258,7 +254,15 @@
     // 获取仓库当前库存量
     function fetchStorage() {
         $('#repository_selector').change(function () {
-            stockin_repository = $(this).val();
+            stockin_repository = $('#repository_selector').val();
+            loadStorageInfo();
+        });
+        $('#supplier_input').change(function () {
+            stockin_repository = $('#repository_selector').val();
+            loadStorageInfo();
+        });
+        $('#goods_input').change(function () {
+            stockin_repository = $('#repository_selector').val();
             loadStorageInfo();
         });
     }
@@ -306,8 +310,8 @@
                 supplierID: stockin_supplier,
                 goodsID: stockin_goods,
                 number: $('#stockin_input').val(),
-            }
 
+            }
             $.ajax({
                 type: 'POST',
                 url: 'stockRecordManage/stockIn',

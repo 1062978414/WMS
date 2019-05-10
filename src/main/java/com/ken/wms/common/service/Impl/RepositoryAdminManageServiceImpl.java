@@ -11,6 +11,7 @@ import com.ken.wms.domain.UserInfoDTO;
 import com.ken.wms.exception.RepositoryAdminManageServiceException;
 import com.ken.wms.exception.UserInfoServiceException;
 import com.ken.wms.security.service.Interface.UserInfoService;
+import com.ken.wms.security.util.MD5Util;
 import com.ken.wms.util.aop.UserOperation;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -277,6 +278,32 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
             throw new RepositoryAdminManageServiceException(e);
         }
     }
+
+
+    /**
+     * 重置仓库管理员棉麻
+     *
+     * @param repositoryAdminID 仓库管理员ID
+     * @return 返回一个boolean值，值为true代表重置成功，否则代表失败
+     */
+    @UserOperation(value = "重置仓库管理员密码")
+    @Override
+    public boolean resetRepositoryAdminPassword(Integer repositoryAdminID) throws RepositoryAdminManageServiceException {
+
+        try {
+            // 重置仓库管理员信息
+            // 对密码进行加密
+            String tempStr = MD5Util.MD5(repositoryAdminID.toString());
+            String encodePwd = MD5Util.MD5(tempStr + repositoryAdminID.toString());
+            repositoryAdminMapper.resetPwd(repositoryAdminID, encodePwd);
+
+            return true;
+
+        } catch (PersistenceException e) {
+            throw new RepositoryAdminManageServiceException(e);
+        }
+    }
+
 
     /**
      * 为仓库管理员指派指定 ID 的仓库

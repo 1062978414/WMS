@@ -88,9 +88,17 @@ public interface RepositoryAdminManageService {
      * 删除仓库管理员信息
      *
      * @param repositoryAdminID 仓库管理员ID
-     * @return 返回一个boolean值，值为true代表删除成功，否则代表失败
+     * @return 返回一个boolean值，值为true代表重置成功，否则代表失败
      */
     boolean deleteRepositoryAdmin(Integer repositoryAdminID) throws RepositoryAdminManageServiceException;
+
+    /**
+     * 重置仓库管理员信息
+     *
+     * @param repositoryAdminID 仓库管理员ID
+     * @return 返回一个boolean值，值为true代表删除成功，否则代表失败
+     */
+    boolean resetRepositoryAdminPassword(Integer repositoryAdminID) throws RepositoryAdminManageServiceException;
 
     /**
      * 为仓库管理员指派指定 ID 的仓库

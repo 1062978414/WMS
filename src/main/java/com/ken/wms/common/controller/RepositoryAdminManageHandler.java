@@ -210,6 +210,30 @@ public class RepositoryAdminManageHandler {
         return responseContent.generateResponse();
     }
 
+
+    /**
+     * 重置指定 ID 的仓库管理员密码
+     *
+     * @param repositoryAdminID 仓库ID
+     * @return 返回一个map，其中：key 为 result 的值为操作的结果，包括：success 与 error；key 为 data
+     * 的值为仓库管理员信息
+     */
+    @RequestMapping(value = "resetRepositoryAdminPassword", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map<String, Object> resetRepositoryAdminPassword(Integer repositoryAdminID) throws RepositoryAdminManageServiceException {
+        // 初始化 Response
+        Response responseContent = ResponseFactory.newInstance();
+
+        // 重置
+        String result = repositoryAdminManageService.resetRepositoryAdminPassword(repositoryAdminID)
+                ? Response.RESPONSE_RESULT_SUCCESS : Response.RESPONSE_RESULT_ERROR;
+
+        // 设置 Response
+        responseContent.setResponseResult(result);
+        return responseContent.generateResponse();
+    }
+
     /**
      * 从文件中导入仓库管理员信息
      *
