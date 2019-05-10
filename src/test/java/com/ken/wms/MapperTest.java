@@ -2,7 +2,7 @@
 //
 //import com.ken.wms.common.service.Interface.StockRecordManageService;
 //import com.ken.wms.common.service.Interface.SystemLogService;
-//import com.ken.wms.dao.AccessRecordMapper;
+//import com.ken.wms.dao.AccessRecordMapper;不是vsd
 //import com.ken.wms.dao.StockInMapper;
 //import com.ken.wms.dao.StockOutMapper;
 //import com.ken.wms.dao.UserOperationRecordMapper;
