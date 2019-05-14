@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ken.wms.dao.VideoMapper">
+    <resultMap type="com.ken.wms.domain.Video" id="video">
+        <id property="id" column="VIDEO_ID"/>
+        <result property="name" column="VIDEO_NAME"/>
+        <result property="info" column="VIDEO_INFO"/>
+        <result property="createdate" column="VIDEO_CREATEDATE"/>
+        <result property="createuser" column="VIDEO_CREATEUSER"/>
+        <result property="num" column="VIDEO_CLICK_NUM"/>
+    </resultMap>
+    <select id="selectAll" resultMap="video">
+        select
+            VIDEO_ID,
+            VIDEO_NAME,
+            VIDEO_INFO,
+            VIDEO_CREATEDATE,
+            VIDEO_CREATEUSER,
+            VIDEO_CLICK_NUM
+        from
+        wms_video
+    </select>
+</mapper>

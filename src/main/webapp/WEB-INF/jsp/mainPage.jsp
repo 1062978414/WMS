@@ -80,7 +80,7 @@ pageEncoding="UTF-8"%>
                         </h4>
                         </a>
                     </div>
-                    <div id="collapse1" class="panel-collapse collapse collapseBody">
+                    <div id="collapse1" class="panel-collapse collapse collapseBody in"><!--collapse collapseBody in为默认展开-->
                         <div class="panel-body">
                             <ul class="list-group">
                                 <shiro:hasRole name="commonsAdmin">
@@ -115,7 +115,7 @@ pageEncoding="UTF-8"%>
                         </h4>
                         </a>
                     </div>
-                    <div id="collapse2" class="panel-collapse collapse collapseBody in">
+                    <div id="collapse2" class="panel-collapse collapse collapseBody">
                         <div class="panel-body">
                             <shiro:hasRole name="systemAdmin">
                                 <ul class="list-group">
@@ -169,43 +169,37 @@ pageEncoding="UTF-8"%>
                         </div>
                     </div>
                 </shiro:hasRole>
-                <shiro:hasRole name="systemAdmin">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a href="#collapse4" data-toggle="collapse" data-parent="#accordion"
-                               class="parentMenuTitle collapseHead">
+
+            <shiro:hasRole name="systemAdmin">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a href="#collapse4" data-toggle="collapse" data-parent="#accordion"
+                           class="parentMenuTitle collapseHead">
                             <h4 class="panel-title">
-                              基础数据
+                                资源管理
                                 <div class="pull-right	">
                                     <span class="caret"></span>
                                 </div>
                             </h4>
-                            </a>
-                        </div>
-                        <div id="collapse4" class="panel-collapse collapse collapseBody">
-                            <div class="panel-body">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/supplierManagement.jsp">供应商信息管理</a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/customerManagement.jsp">客户信息管理</a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/goodsManagement.jsp">货物信息管理</a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/repositoryManagement.jsp">仓库信息管理</a>
-                                    </li>
-                                </ul>
-                            </div>
+                        </a>
+                    </div>
+                    <div id="collapse4" class="panel-collapse collapse collapseBody">
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="javascript:void(0)" id="" class="menu_item"
+                                       name="pagecomponent/videoShow.jsp">视频展示</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="javascript:void(0)" id="" class="menu_item"
+                                       name="pagecomponent/videoManagement.jsp">视频管理</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                </shiro:hasRole>
+                </div>
+            </shiro:hasRole>
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a href="#collapse5" data-toggle="collapse" data-parent="#accordion"

@@ -121,6 +121,9 @@
 							$('#checkCode').val("").focus();
 							$("#login_form").data('bootstrapValidator').updateMessage('checkCode','callback','验证码错误!');
 							$("#login_form").data('bootstrapValidator').updateStatus('checkCode','INVALID','');
+							//刷新验证码
+							var timestamp = new Date().getTime();
+							$(checkCodeImg).attr("src", "account/checkCode/" + timestamp);
 						}
 					}
 				});
