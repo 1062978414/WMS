@@ -436,6 +436,10 @@ pageEncoding="UTF-8"%>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript"
-        src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js"></script>
+        src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js"></script
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/js/fileupload/js/fileinput.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/js/fileupload/js/locales/zh.js"></script>
 </body>
 </html>
