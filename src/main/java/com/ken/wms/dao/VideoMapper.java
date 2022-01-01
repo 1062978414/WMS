@@ -15,4 +15,10 @@ public interface VideoMapper {
      * @return 返回所有视频信息
      */
     List<Video> selectAll();
+
+    /**
+     * 添加视频
+     * @param video
+     */
+    void insert(Video video);
 }

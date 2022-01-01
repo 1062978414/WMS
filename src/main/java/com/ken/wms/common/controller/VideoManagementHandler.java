@@ -5,26 +5,27 @@ import com.ken.wms.common.service.Interface.VideoManageService;
 import com.ken.wms.common.util.Response;
 import com.ken.wms.common.util.ResponseFactory;
 import com.ken.wms.domain.RepositoryAdmin;
+import com.ken.wms.domain.UserInfoDTO;
 import com.ken.wms.domain.Video;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/**/videoManage")
@@ -97,7 +98,7 @@ public class VideoManagementHandler {
         List<Video> rows = null;
         long total = 0;
         // 查询
-        Map<String, Object> queryResult = query(keyWord,searchType,offset,limit);
+        Map<String, Object> queryResult = query(keyWord, searchType, offset, limit);
 
         if (queryResult != null) {
             rows = (List<Video>) queryResult.get("data");
@@ -110,35 +111,74 @@ public class VideoManagementHandler {
         return responseContent.generateResponse();
     }
 
-    @RequestMapping(value="/addFile",method={RequestMethod.POST})
+    @RequestMapping(value = "/addFile", method = {RequestMethod.POST})
     @ResponseBody
-    public Map<String,Object> addImg(HttpServletRequest request, HttpServletResponse response){
-        Map<String,Object> result= new HashMap<String, Object>();
+    public Map<String, Object> addFile(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> result = new HashMap<String, Object>();
 
         // 转型为MultipartHttpRequest：
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         // 获得文件：
-        MultipartFile file= multipartRequest.getFile("myfile");
+        MultipartFile file = multipartRequest.getFile("myfile");
+        //文件全名
+        String fileFullName = "";
         //自动生成视频ID
         String videoId = UUID.randomUUID().toString();
-        try{
-            if(!(file.getOriginalFilename() == null || "".equals(file.getOriginalFilename()))){
+        try {
+            if (!(file.getOriginalFilename() == null || "".equals(file.getOriginalFilename()))) {
                 String imgDir = "E:\\upload\\video";        // 图片上传地址
+                String strPath = "E:\\upload\\video";
+                File filePath = new File(strPath);
+                if(!filePath.exists()){
+                    filePath.mkdirs();
+                }
                 // 对文件进行存储处理
                 byte[] bytes = file.getBytes();
-                Path path = Paths.get(imgDir,"\\"+videoId);
-                Files.write(path,bytes);
+                fileFullName = videoId+"."+file.getOriginalFilename().trim().replace(".","%").split("%")[file.getOriginalFilename().trim().replace(".","%").split("%").length-1];
+                Path path = Paths.get(imgDir, "\\" + fileFullName);
+                Files.write(path, bytes);
 
-                result.put("msg","上传成功！");
-                result.put("result",true);
+                result.put("msg", "上传成功！");
+                result.put("result", true);
+                result.put("filename",fileFullName);
             }
-        }catch(IOException e){
-            result.put("msg","出错了");
-            result.put("result",false);
+        } catch (IOException e) {
+            result.put("msg", "出错了");
+            result.put("result", false);
+            fileFullName="false";
             e.printStackTrace();
-        }catch (Exception e1){
+        } catch (Exception e1) {
             e1.printStackTrace();
         }
         return result;
     }
+
+
+    /**
+     * 视频数据新增
+     *
+     * @param video
+     * @since 2019年6月6日09:42:12
+     */
+    @RequestMapping(value = "/addVideo", method = {RequestMethod.POST})
+    public
+    @ResponseBody
+    Map<String, Object> addVideo(@RequestBody Video video) {
+        //初始化Response
+        Response responseContent = ResponseFactory.newInstance();
+        //获取当前时间
+        video.setCreatedate(new Date());
+        //获取用户信息
+        Subject currentSubject = SecurityUtils.getSubject();
+        Session session = currentSubject.getSession();
+        UserInfoDTO userInfo = (UserInfoDTO) session.getAttribute("userInfo");
+        Integer userID = userInfo.getUserID();
+        String userName = userInfo.getUserName();
+        video.setCreateuser(userName);
+        String result = videoManageService.addVideo(video) ? Response.RESPONSE_RESULT_SUCCESS : Response.RESPONSE_RESULT_ERROR;
+        //设置Response
+        responseContent.setResponseResult(result);
+        return responseContent.generateResponse();
+    }
+
 }

@@ -18,6 +18,7 @@ public class VideoManageServiceImpl implements VideoManageService {
 
     @Autowired
     private VideoMapper videoMapper;
+
     /**
      * 查询所有仓库管理员的记录
      *
@@ -44,8 +45,9 @@ public class VideoManageServiceImpl implements VideoManageService {
         boolean isPagination = true;
 
         //validate
-        if (offset < 0 || limit < 0)
+        if (offset < 0 || limit < 0) {
             isPagination = false;
+        }
         //query
         if (isPagination) {
             PageHelper.offsetPage(offset, limit);
@@ -53,17 +55,53 @@ public class VideoManageServiceImpl implements VideoManageService {
             if (video != null) {
                 PageInfo<Video> pageInfo = new PageInfo<>(video);
                 total = pageInfo.getTotal();
-            } else
+            } else {
                 video = new ArrayList<>();
+            }
         } else {
             video = videoMapper.selectAll();
-            if (video != null)
+            if (video != null) {
                 total = video.size();
-            else
+            } else {
                 video = new ArrayList<>();
+            }
         }
         resultSet.put("data", video);
         resultSet.put("total", total);
         return resultSet;
+    }
+
+    /**
+     * 添加视频信息
+     *
+     * @param video
+     * @return 返回boolean 值
+     * @since 2019年6月6日09:55:28
+     */
+
+    @Override
+    public boolean addVideo(Video video) {
+        if (video != null) {
+            try {
+                // 有效性验证
+                if (videoCheck(video)) {
+                    videoMapper.insert(video);
+                }
+                return true;
+            }catch (Exception e){
+
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 检查仓库信息是否满足
+     *
+     * @param video 视频信息
+     * @return 若视频信息满足要求则返回true，否则返回false
+     */
+    private boolean videoCheck(Video video) {
+        return video.getName() != null && video.getInfo() != null && video.getNamebyuuid() != null;
     }
 }

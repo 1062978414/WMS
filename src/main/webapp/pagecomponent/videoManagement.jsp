@@ -10,76 +10,100 @@
     var search_type_Video = "none";
     var search_keyWord = "";
     var selectID;
+    var NAMEBYUUID;
 
     //初始化事件
     $(function () {
-
         videoListInit();
         searchAction();
         optionAction();
         changeDateFormat();
         addVideoAction();
+        bootstrapValidatorInit();
         //0.初始化fileinput
-        var oFileInput = new FileInput();
-        oFileInput.Init("myfile", "videoManage/addFile");
+                var oFileInput = new FileInput();
+                oFileInput.Init("myfile", "videoManage/addFile");
 
     })
 
-    //新增窗口提交按钮点击事件
-    $('#add_modal_submit').click(function () {
-        //实现验证成功后提交
-        var bootstrapValidator = $("#videoAdd_form").data('bootstrapValidator');
-        //手动触发验证
-        bootstrapValidator.validate();
-        if (bootstrapValidator.isValid()) {
-            var data = {
-                name: $('#name').val(),
-                info: $('#info').val(),
-                filename: $('#file-caption-name').val()
-            }
-            // ajax
-            $.ajax({
-                type: "POST",
-                url: "storageManage/addStorageRecord",
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify(data),
-                success: function (response) {
-                    $('#add_modal').modal("hide");
-                    var msg;
-                    var type;
-                    var append = '';
-                    if (response.result == "success") {
-                        type = "success";
-                        msg = "库存信息添加成功";
-                    } else if (response.result == "error") {
-                        type = "error";
-                        msg = "库存信息添加失败";
-                    }
-                    showMsg(type, msg, append);
-                    tableRefresh();
+    //获取当前时间方法，可共用
 
-                    // reset
-                    $('#storage_goodsID').val("");
-                    $('#storage_repositoryID').val("");
-                    $('#storage_number').val("");
-                    $('#storage_form').bootstrapValidator("resetForm", true);
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    $('#add_modal').modal("hide");
-                    // handle error
-                    handleAjaxError(xhr.status);
-                }
-            })
+    function getCurDate() {
+        var date = new Date();
+        //年
+        var year = date.getFullYear();
+        if(year.length==1){
+            year = "0"+""+year;
         }
-        //	})
-    })
+        //月
+        var month = date.getMonth() + 1;
+        if(month.length==1){
+            month = "0"+""+month;
+        }
+        //日
+        var day = date.getDate();
+        if(day.length==1){
+            day = "0"+""+day;
+        }
+        //时
+        var hh = date.getHours();
+        if(hh.length==1){
+            hh = "0"+""+hh;
+        }
+        //分
+        var mm = date.getMinutes();
+        if(mm.length==1){
+            mm = "0"+""+mm;
+        }
+        //秒
+        var ss = date.getSeconds();
+        if(ss.length==1){
+            ss = "0"+""+ss;
+        }
+        var rq = year + "-" + month + "-" + day + "%" + hh + ":" + mm + ":" + ss;
+        return rq;
+    }
+        // 添加视频模态框数据校验
+    function bootstrapValidatorInit() {
+        $("#videoAdd_form").bootstrapValidator({
+            message: 'This is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            excluded: [':disabled'],
+            fields: {
+                name: {
+                    validators: {
+                        notEmpty: {
+                            message: '视频名称不能为空'
+                        }
+                    }
+                },
+                info: {
+                    validators: {
+                        notEmpty: {
+                            message: '视频描述不能为空'
+                        }
+                    }
+                },
+                myfile: {
+                    validators: {
+                        notEmpty: {
+                            message: '请上传视频'
+                        }
+                    }
+                }
+            }
+        })
     }
 
-    function  FileInput(){
+
+    function FileInput() {
         var oFile = new Object();
         //初始化fileinput控件（第一次初始化）
-        oFile.Init = function(ctrlName, uploadUrl) {
+        oFile.Init = function (ctrlName, uploadUrl) {
             var control = $('#' + ctrlName);
 
             //初始化上传控件的样式
@@ -88,7 +112,8 @@
                 uploadUrl: uploadUrl, //上传的地址
                 //allowedFileExtensions: ['avi ','rmvb ','asf ','3gp ','mpg ','mpeg ','mpe ','wmv ','mp4 ','mkv ','vob'],//接收的文件后缀
                 showUpload: false, //是否显示上传按钮
-                showCaption: false,//是否显示标题
+                autoReplace : true,//自动替换上一个文件
+                showCaption: true,//是否显示标题
                 browseClass: "btn btn-primary", //按钮样式
                 //dropZoneEnabled: false,//是否显示拖拽区域
                 //minImageWidth: 50, //图片的最小宽度
@@ -99,35 +124,86 @@
                 //minFileCount: 0,
                 maxFileCount: 1, //表示允许同时上传的最大文件个数
                 enctype: 'multipart/form-data',
-                validateInitialCount:true,
+                validateInitialCount: true,
                 previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
                 msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+            }).on("filebatchselected", function(event, files) {
+                $(this).fileinput("upload");
+            })  .on("fileuploaded", function(event, data) {
+                if(data.response)
+                {
+                    NAMEBYUUID=data.response.filename;
+                }
             });
 
-            //导入文件上传完成之后的事件
-            $("#txt_file").on("fileuploaded", function (event, data, previewId, index) {
-                $("#myModal").modal("hide");
-                var data = data.response.lstOrderImport;
-                if (data == undefined) {
-                    toastr.error('文件格式类型不正确');
-                    return;
-                }
-                //1.初始化表格
-                var oTable = new TableInit();
-                oTable.Init(data);
-                $("#div_startimport").show();
-            });
         }
+
         return oFile;
     };
 
 
-        // 添加视频信息
+    // 添加视频信息
     function addVideoAction() {
         $('#add_Video').click(function () {
             $('#add_modal').modal("show");
+            //重置校验状态
+                $("#videoAdd_form").data('bootstrapValidator').destroy();
+                $('#videoAdd_form').data('bootstrapValidator', null);
+                bootstrapValidatorInit();
+
         });
+        //新增窗口提交按钮点击事件
+        $('#add_modal_submit').click(function () {
+            //实现验证成功后提交
+            debugger
+            var bootstrapValidator = $("#videoAdd_form").data('bootstrapValidator');
+            //手动触发验证
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                debugger
+                var data = {
+                    name: $('#name').val(),
+                    info: $('#info').val(),
+                    realfilename: $('.file-caption-name').val(),
+                    namebyuuid: NAMEBYUUID
+            }
+                // ajax
+                $.ajax({
+                    type: "POST",
+                    url: "videoManage/addVideo",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        $('#add_modal').modal("hide");
+                        var msg;
+                        var type;
+                        var append = '';
+                        if (response.result == "success") {
+                            type = "success";
+                            msg = "视频添加成功";
+                        } else if (response.result == "error") {
+                            type = "error";
+                            msg = "视频添加失败";
+                        }
+                        $("#name").val("");
+                        $("#info").val("");
+                        $(".fileinput-remove").click()
+                        showMsg(type, msg, append);
+                        tableRefresh();
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        $('#add_modal').modal("hide");
+                        // handle error
+                        handleAjaxError(xhr.status);
+                    }
+                })
+
+            }
+            //	})
+        })
     }
+
     //查询类型下拉选择操作
     function optionAction() {
         $(".dropOption").click(function () {
@@ -275,7 +351,7 @@
 
     // 表格刷新
     function tableRefresh() {
-        $('#repositoryAdminList').bootstrapTable('refresh', {
+        $('#videoList').bootstrapTable('refresh', {
             query: {}
         });
     }
@@ -284,7 +360,7 @@
 <html>
 <head>
     <style>
-        .btn-file{
+        .btn-file {
             margin-top: 0px;
         }
     </style>
@@ -322,7 +398,7 @@
                                 </label>
                                 <div class="col-md-7 col-sm-7">
                                     <input type="text" class="form-control" id="name"
-                                           name="repositoryAdmin_name" placeholder="视频名称">
+                                           name="name" placeholder="视频名称">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -330,7 +406,7 @@
                                 </label>
                                 <div class="col-md-7 col-sm-7">
                                     <input type="text" class="form-control" id="info"
-                                           name="repositoryAdmin_name" placeholder="视频描述">
+                                           name="info" placeholder="视频描述">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -338,8 +414,8 @@
                                 </label>
                                 <br>
                                 <div style="float: right;margin-top: 15px" class="col-md-10 col-sm-10">
-                                    <input   id="myfile" name="myfile" class="file" type="file" data-show-caption="true">
-                                   <%-- <p class="help-block">支持jpg、jpeg、png格式，大小不超过2.0M</p>--%>
+                                    <input id="myfile" name="myfile" class="file" type="file" data-show-caption="true">
+                                    <%-- <p class="help-block">支持jpg、jpeg、png格式，大小不超过2.0M</p>--%>
                                 </div>
                             </div>
                         </form>
@@ -386,12 +462,14 @@
                                 <input id="search_input" type="text" class="form-control" placeholder="查询视频信息">
                             </div>
 
-                                <div class="col-md-7 dateRange" hidden="hidden">
-                                    <form action="" class="form-inline">
-                                        <input  style="width: 120px" class="form_date form-control" value="" id="search_start_date" name="" placeholder="开始日期">
-                                        <label  class="form-label">&nbsp;-&nbsp;</label>
-                                        <input  style="width: 120px" class="form_date form-control" value="" id="search_end_date" name="" placeholder="结束日期">
-                                    </form>
+                            <div class="col-md-7 dateRange" hidden="hidden">
+                                <form action="" class="form-inline">
+                                    <input style="width: 120px" class="form_date form-control" value=""
+                                           id="search_start_date" name="" placeholder="开始日期">
+                                    <label class="form-label">&nbsp;-&nbsp;</label>
+                                    <input style="width: 120px" class="form_date form-control" value=""
+                                           id="search_end_date" name="" placeholder="结束日期">
+                                </form>
                             </div>
                             <div class="col-md-2 col-sm-5">
                                 <button id="search_button" class="btn btn-success">

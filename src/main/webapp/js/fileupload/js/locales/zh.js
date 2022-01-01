@@ -85,7 +85,7 @@
             uploadBatch: '批量上传',
             uploadExtra: '表单数据上传'
         },
-        dropZoneTitle: '拖拽文件到这里 &hellip;<br>支持多文件同时上传',
+        dropZoneTitle: '拖拽文件到这里 &hellip;<br>只能上传一个文件',
         dropZoneClickTitle: '<br>(或点击{files}按钮选择文件)',
         fileActionSettings: {
             removeTitle: '删除文件',

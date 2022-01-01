@@ -209,8 +209,9 @@ public class RepositoryManageServiceImpl implements RepositoryService {
         if (repository != null) {
             try {
                 // 有效性验证
-                if (repositoryCheck(repository))
+                if (repositoryCheck(repository)) {
                     repositoryMapper.insert(repository);
+                }
                 if (repository.getId() != null) {
                     return true;
                 }

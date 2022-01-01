@@ -10,8 +10,23 @@
         <result property="info" column="VIDEO_INFO"/>
         <result property="createdate" column="VIDEO_CREATEDATE"/>
         <result property="createuser" column="VIDEO_CREATEUSER"/>
+        <result property="realfilename" column="VIDEO_REALNAME"/>
+        <result property="namebyuuid" column="VIDEO_UUID"/>
         <result property="num" column="VIDEO_CLICK_NUM"/>
     </resultMap>
+
+    <insert id="insert">
+        INSERT INTO WMS_VIDEO (
+            VIDEO_NAME,
+            VIDEO_INFO,
+            VIDEO_REALNAME,
+            VIDEO_UUID,
+            VIDEO_CREATEDATE,
+            VIDEO_CREATEUSER)
+            VALUES
+         (#{name},#{info},#{realfilename},#{namebyuuid},#{createdate},#{createuser});
+    </insert>
+
     <select id="selectAll" resultMap="video">
         select
             VIDEO_ID,
